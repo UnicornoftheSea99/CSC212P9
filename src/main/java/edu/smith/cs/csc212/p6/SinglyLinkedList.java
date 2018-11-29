@@ -91,7 +91,10 @@ public class SinglyLinkedList<T> implements P6List<T>, Iterable<T> {
 			T lonely=start.value;
 			start=null;
 			return lonely;
-		}else {
+		}if (index==0) {
+			start=start.next;
+		}
+		else {
 			int gl=0;
 			Node<T>current=start;
 			for (gl=index-1; gl>0; gl--) {
@@ -156,19 +159,24 @@ public class SinglyLinkedList<T> implements P6List<T>, Iterable<T> {
 	 */
 	@Override
 	public void addIndex(T item, int index) {
+		Node<T> current=start;
+		Node<T> boo = new Node<T>(item, null);
+		if (index<0 || index>size()) {
+			throw new BadIndexError();
+		}
 		if(index==0){
 			addFront(item);
-		}else {
-			int gi=0;
-			for (Node<T> current = start; current != null; current = current.next) {
-				if (gi==index-1) {
-					Node<T> boo = new Node<T>(item, current.next);
-					current.next=boo;
+		}else if(index==size()) {
+			addBack(item);
+		}
+		else {
+			for (int gi=0; gi<index-1;gi++) {
+					current=current.next;
 				}
-				 gi++;
+			boo.next=current.next;
+			current.next=boo;
 			}
 		}
-	}
 
 	/**
 	 * Get the first item in the list.
@@ -180,6 +188,9 @@ public class SinglyLinkedList<T> implements P6List<T>, Iterable<T> {
 	 */
 	@Override
 	public T getFront() {
+		if (size()==0) {
+			throw new EmptyListError();
+		}
 		return start.value;
 	}
 
@@ -223,14 +234,15 @@ public class SinglyLinkedList<T> implements P6List<T>, Iterable<T> {
 	 */
 	@Override
 	public T getIndex(int index) {
+		checkNotEmpty();
 		int at = 0;
 		for (Node<T> current = start; current != null; current = current.next) {
 			if (at == index) {
 				return current.value;
 			}
 			at++;
-	}
-		throw new IndexOutOfBoundsException();
+		}
+		throw new BadIndexError();
 	}
 	
 	/**

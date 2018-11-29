@@ -158,6 +158,7 @@ public class DLLTest {
 		Random rand = new Random(13);
 		P6List<Integer> items2 = makeEmptyList();
 		while(!items1.isEmpty()) {
+			//int value = items1.removeIndex(items1.size()-1);
 			int value = items1.removeIndex(rand.nextInt(items1.size()));
 			insertSorted(items2, value);
 		}

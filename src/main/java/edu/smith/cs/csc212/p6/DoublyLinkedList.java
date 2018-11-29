@@ -88,28 +88,41 @@ public class DoublyLinkedList<T> implements P6List<T> {
 	@Override
 	public T removeIndex(int index) {
 		checkNotEmpty();
+		Node<T>current=start;
 		T removed = getIndex(index);
 		if (size()==1) {
 			T lonely=start.value;
 			start=null;
 			return lonely;
+		}
+		if (index==0) {
+			//Node<T> pole= start;
+			start=start.after;
+			start.before=null;
+			//pole=null;
+
+		}
+		if(index==this.size()-1) {
+			current.after=null;
+			current.before.after.after=null;
 		}else {
-			int gl=0;
-			Node<T>current=start;
-			for (gl=index-1; gl>0; gl--) {
-				if(current.after!=null) {
-					current=current.after;
-				}
-				else {
-					current.after=null;
-				}
+			for (int gl=0; gl<index;gl++) {
+				current=current.after;
 			}
 			current.after=current.after.after;
+			current.after.after.before=current;
+			//getIndex()-1.next=getIndex()+1;
+			//				if(current.after!=null) {
+			//					current=current.after;
+			//				}
 		}
 		return removed;
+
 	}
 
 
+
+	
 	/**
 	 * Adds item to front 
 	 * 
@@ -179,9 +192,17 @@ public class DoublyLinkedList<T> implements P6List<T> {
 	 */
 	@Override
 	public void addIndex(T item, int index) {
+		//Node<T>current=start;
+		if (index<0 || index>size()) {
+			throw new BadIndexError();
+		}
 		if(index==0){
 			addFront(item);
-		}else {
+		}
+		if (index==size()) {
+			addBack(item);
+		}
+		else {
 			int gi=0;
 			for (Node<T> current = start; current != null; current = current.after) {
 				if (gi==index-1) {
@@ -203,6 +224,9 @@ public class DoublyLinkedList<T> implements P6List<T> {
 	 */
 	@Override
 	public T getFront() {
+		if (size()==0) {
+			throw new EmptyListError();
+		}
 		return start.value;
 	}
 
@@ -216,6 +240,9 @@ public class DoublyLinkedList<T> implements P6List<T> {
 	 */
 	@Override
 	public T getBack() {
+		if (size()==0) {
+			throw new EmptyListError();
+		}
 		return end.value;
 	}
 	
@@ -238,7 +265,7 @@ public class DoublyLinkedList<T> implements P6List<T> {
 			}
 			at++;
 	}
-		throw new IndexOutOfBoundsException();
+		throw new BadIndexError();
 	}
 
 	/**

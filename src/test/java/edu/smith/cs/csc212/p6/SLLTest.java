@@ -146,25 +146,26 @@ public class SLLTest {
 				return;
 			}
 		}
+
 		items.addBack(num);
 	}
 	
 	@Test
 	public void testAddIndexFull() {
 		P6List<Integer> items1 = makeEmptyList();
+		//iterates 32*5 times = 160
 		for (int i=0; i<GrowableList.START_SIZE*5; i++) {
 			items1.addBack((i+1)*3);
 			Assert.assertEquals(i+1, items1.size());
 			Assert.assertEquals((i+1)*3, (int) items1.getBack()); 
 		}
-		
 		Random rand = new Random(13);
 		P6List<Integer> items2 = makeEmptyList();
 		while(!items1.isEmpty()) {
-			int value = items1.removeIndex(rand.nextInt(items1.size()));
+			int value=items1.removeIndex(rand.nextInt(items1.size()));
 			insertSorted(items2, value);
+			
 		}
-		
 		for (int i=0; i<GrowableList.START_SIZE*5; i++) {
 			Assert.assertEquals((i+1)*3, (int) items2.getIndex(i)); 
 		}

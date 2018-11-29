@@ -120,7 +120,7 @@ public class GrowableList<T> implements P6List<T> {
 	@Override
 	public void addIndex(T item, int index) {
 		//case if ask to add to index that is not possible
-		if (index<0 || index>=this.array.length) {
+		if (index<0 || index>fill) {
 			throw new BadIndexError();
 		}
 		//case where need to make list bigger
