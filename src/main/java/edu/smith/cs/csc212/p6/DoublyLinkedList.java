@@ -90,31 +90,37 @@ public class DoublyLinkedList<T> implements P6List<T> {
 		checkNotEmpty();
 		Node<T>current=start;
 		T removed = getIndex(index);
-		if (size()==1) {
-			T lonely=start.value;
-			start=null;
-			return lonely;
+		//case where only one thing in list
+		if (index<0 || index>=size()) {
+			throw new BadIndexError();
 		}
+		for (int gl=0; gl<index;gl++) {
+			current=current.after;
+		}
+//		if (index==1) {
+//			if (size()==1) {
+//				T lonely=start.value;
+//				start=null;
+//				return lonely;
+//			}else {
+//				current=current.after;
+//				current.before=null;
+//			}
 		if (index==0) {
-			//Node<T> pole= start;
-			start=start.after;
-			start.before=null;
-			//pole=null;
-
-		}
-		if(index==this.size()-1) {
+		start=current.after;
+		//start.before=null;
+	
+		}else if(index==this.size()-1) {
+			current=current.before;
 			current.after=null;
-			current.before.after.after=null;
-		}else {
-			for (int gl=0; gl<index;gl++) {
-				current=current.after;
-			}
-			current.after=current.after.after;
-			current.after.after.before=current;
-			//getIndex()-1.next=getIndex()+1;
-			//				if(current.after!=null) {
-			//					current=current.after;
-			//				}
+			//current.before.after.after=null;
+		}
+		//Case where looking for item at index 0
+
+		else {
+			current.after.before=current.before;
+			current.before.after=current.after.after;
+			
 		}
 		return removed;
 
