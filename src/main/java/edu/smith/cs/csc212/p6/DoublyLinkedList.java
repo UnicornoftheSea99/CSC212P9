@@ -104,7 +104,7 @@ public class DoublyLinkedList<T> implements P6List<T> {
 //		if (index==1) {
 //			if (size()==1) {
 //				T lonely=start.value;
-//				start=null;
+//				start=null;   
 //				return lonely;
 //			}else {
 //				current=current.after;
@@ -112,7 +112,7 @@ public class DoublyLinkedList<T> implements P6List<T> {
 //			}
 		if (index==0) {
 		start=current.after;
-		//start.before=null;
+		current.before=null;
 	
 		}else if(index==this.size()-1) {
 			current=current.before;
