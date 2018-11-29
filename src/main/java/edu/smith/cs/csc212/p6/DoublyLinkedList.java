@@ -94,44 +94,31 @@ public class DoublyLinkedList<T> implements P6List<T> {
 		checkNotEmpty();
 		Node<T>current=start;
 		T removed = getIndex(index);
-		//case where only one thing in list
 		if (index<0 || index>=size()) {
 			throw new BadIndexError();
 		}
 		for (int gl=0; gl<index;gl++) {
 			current=current.after;
 		}
-//		if (index==1) {
-//			if (size()==1) {
-//				T lonely=start.value;
-//				start=null;   
-//				return lonely;
-//			}else {
-//				current=current.after;
-//				current.before=null;
-//			}
 		if (index==0) {
-		start=current.after;
-		current.before=null;
-	
-		}else if(index==this.size()-1) {
-			current=current.before;
+			start=current.after;
+			current.before=null;
 			current.after=null;
-			//current.before.after.after=null;
-		}
-		//Case where looking for item at index 0
 
-		else {
+		}else if(index==this.size()-1) {
+			current.before.after=null;
+			end=current.before;
+			current.after=null;
+
+		}else {
 			current.after.before=current.before;
-			current.before.after=current.after.after;
+			current.before.after=current.after;
 			
+			current.before =null;
+	        current.after = null;
 		}
 		return removed;
-
 	}
-
-
-
 	
 	/**
 	 * Adds item to front 
@@ -219,7 +206,10 @@ public class DoublyLinkedList<T> implements P6List<T> {
 					boo.before=current;
 					boo.after=current.after;
 					current.after=boo;
-					boo.after.before=boo;
+					if (boo.after!=null) {
+						boo.after.before=boo;
+					return;
+					}
 				}
 				 gi++;
 			}

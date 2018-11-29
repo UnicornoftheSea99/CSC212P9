@@ -19,7 +19,7 @@ public class ChunkyLinkedList<T> implements P6List<T> {
 	public ChunkyLinkedList(int chunkSize) {
 		this.chunkSize = chunkSize;
 		chunks = new SinglyLinkedList<>();
-		chunks.addBack(new FixedSizeList<>(chunkSize));
+		//chunks.addBack(new FixedSizeList<>(chunkSize));
 	}
 
 	/**
@@ -60,6 +60,10 @@ public class ChunkyLinkedList<T> implements P6List<T> {
 		return getIndex(index);
 	}
 
+	public FixedSizeList<T> makeChunk(){
+		return new FixedSizeList<>(this.chunkSize);
+	}
+	
 	/**
 	 * Add an item to the front of this list. The item should be at getIndex(0)
 	 * after this call.
@@ -68,7 +72,12 @@ public class ChunkyLinkedList<T> implements P6List<T> {
 	 */
 	@Override
 	public void addFront(T item) {
-		addIndex(item, 0);	
+		FixedSizeList<T> front = chunks.getFront();
+		if (front.isFull()) {
+		front = makeChunk();
+		chunks.addFront(front);
+		}
+			front.addFront(item);
 	}
 
 	/**
@@ -79,12 +88,18 @@ public class ChunkyLinkedList<T> implements P6List<T> {
 	 */
 	@Override
 	public void addBack(T item) {
+		FixedSizeList<T> back = chunks.getBack();
 		if (size()==0){
 			addFront(item);
-		}else {
-			addIndex(item,size()-1);
-			}
+		}		
+		if (back.isFull()) {
+		back = makeChunk();
+		chunks.addBack(back);
+		}
+			back.addBack(item);
 	}
+	
+	
 	
 	/**
 	 * Add an item before ``index`` in this list. Therefore,
@@ -98,6 +113,7 @@ public class ChunkyLinkedList<T> implements P6List<T> {
 		if (index<0 || index>size()) {
 			throw new BadIndexError();
 		}
+		//modify
 		FixedSizeList<T> front = chunks.getFront();
 		if (front.isFull()) {
 		front = makeChunk();
@@ -186,6 +202,9 @@ public class ChunkyLinkedList<T> implements P6List<T> {
 	@Override
 	public boolean isEmpty() {
 		return this.chunks.isEmpty();
+	}
+	public boolean isFull() {
+		return this.chunks.isFull();
 	}
 	private void checkNotEmpty() {
 		if (this.isEmpty()) {

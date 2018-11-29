@@ -274,9 +274,18 @@ public class SinglyLinkedList<T> implements P6List<T>, Iterable<T> {
 			return true;
 		else {
 		return false;
+		}
 	}
+	
+	@Override
+	public boolean isFull() {
+		if (this.size()==size()) 
+			return true;
+		else {
+			return false;
+		}
 	}
-
+	
 	/**
 	 * Helper method to throw the right error for an empty state.
 	 */

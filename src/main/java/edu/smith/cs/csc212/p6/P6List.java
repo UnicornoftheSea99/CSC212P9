@@ -99,4 +99,6 @@ public interface P6List<T> {
 	 * @return true if the list is empty.
 	 */
 	public boolean isEmpty();
+
+	public boolean isFull();
 }

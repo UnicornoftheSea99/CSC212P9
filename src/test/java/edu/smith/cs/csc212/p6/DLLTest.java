@@ -154,19 +154,12 @@ public class DLLTest {
 			Assert.assertEquals(i+1, items1.size());
 			Assert.assertEquals((i+1)*3, (int) items1.getBack()); 
 		}
-//		for (int i=0; i<items1.size(); i++) {
-//			System.out.println(items1.getIndex(i));
-//		}
+
 		Random rand = new Random(13);
 		P6List<Integer> items2 = makeEmptyList();
 		while(!items1.isEmpty()) {
-			//int value = items1.removeIndex(items1.size()-1);
 			int value = items1.removeIndex(rand.nextInt(items1.size()));
-			//System.out.println("value"+value);
 			insertSorted(items2, value);
-		}
-		for (int i=0; i<items2.size(); i++) {
-			System.out.println("items2"+items2.getIndex(i));
 		}
 		for (int i=0; i<GrowableList.START_SIZE*5; i++) {
 			Assert.assertEquals((i+1)*3, (int) items2.getIndex(i)); 
