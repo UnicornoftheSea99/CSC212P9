@@ -95,13 +95,25 @@ public class ChunkyLinkedList<T> implements P6List<T> {
 	 */
 	@Override
 	public void addIndex(T item, int index) {
-		if (size()==0) {
-			addFront(item);
-		}else {
-			hjhj
+		if (index<0 || index>size()) {
+			throw new BadIndexError();
+		}
+		FixedSizeList<T> front = chunks.getFront();
+		if (front.isFull()) {
+		front = makeChunk();
+		chunks.addFront(front);
+		}
+		else {
+			
 		}
 	}
-	
+//if (size()==0) {
+//	addFront(item);
+//}else if(index==size()) {
+//	addBack(item);
+//}
+
+
 	/**
 	 * Get the first item in the list.
 	 * @return the item.

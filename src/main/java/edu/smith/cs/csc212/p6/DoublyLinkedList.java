@@ -53,13 +53,15 @@ public class DoublyLinkedList<T> implements P6List<T> {
 		if (size()==1) {
 			T casper=start.value;
 			start=null;
+			end=null;
 			return casper;
 		}
 		else {
 			for (Node<T> current = start; current != null; current = current.after) {
-				if (current.after.after==null) {
+				if (current.after==end) {
 					T groot=current.after.value;
 					current.after=null;
+					end=current;
 					return groot;
 				}
 			}
@@ -85,6 +87,8 @@ public class DoublyLinkedList<T> implements P6List<T> {
 	 * @param index a number from 0 to size (excluding size).
 	 * @throws BadIndexError  if the index does not exist.
 	 */
+	
+	
 	@Override
 	public T removeIndex(int index) {
 		checkNotEmpty();
@@ -198,7 +202,7 @@ public class DoublyLinkedList<T> implements P6List<T> {
 	 */
 	@Override
 	public void addIndex(T item, int index) {
-		//Node<T>current=start;
+		Node<T> boo = new Node<T>(item);
 		if (index<0 || index>size()) {
 			throw new BadIndexError();
 		}
@@ -212,8 +216,10 @@ public class DoublyLinkedList<T> implements P6List<T> {
 			int gi=0;
 			for (Node<T> current = start; current != null; current = current.after) {
 				if (gi==index-1) {
-					Node<T> boo = new Node<T>(item);
+					boo.before=current;
+					boo.after=current.after;
 					current.after=boo;
+					boo.after.before=boo;
 				}
 				 gi++;
 			}
