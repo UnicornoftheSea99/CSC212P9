@@ -219,11 +219,7 @@ public class GrowableList<T> implements P6List<T> {
 		return fill == 0;
 	}
 
-	@Override
-	public boolean isFull() {
-		// TODO Auto-generated method stub
-		return false;
-	}
+
 
 
 }

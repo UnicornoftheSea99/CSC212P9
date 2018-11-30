@@ -337,9 +337,4 @@ public class DoublyLinkedList<T> implements P6List<T> {
 		}
 	}
 
-	@Override
-	public boolean isFull() {
-		// TODO Auto-generated method stub
-		return false;
-	}
 }

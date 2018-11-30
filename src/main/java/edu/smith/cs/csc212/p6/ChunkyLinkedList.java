@@ -78,7 +78,7 @@ public class ChunkyLinkedList<T> implements P6List<T> {
 			chunks.addFront(first);
 		}else {
 		FixedSizeList<T> front = chunks.getFront();
-		if (front.isFull()) {
+		if (front.size()==chunkSize) {
 		front = makeChunk();
 		chunks.addFront(front);
 		}
@@ -99,15 +99,15 @@ public class ChunkyLinkedList<T> implements P6List<T> {
 			last.addBack(item);
 			chunks.addBack(last);		
 		}else {
-		FixedSizeList<T> back = chunks.getBack();	
-		System.out.println(back);
-		if (back.isFull()) {
-		back = makeChunk();
-		chunks.addBack(back);
-		//back.addBack(item);
-		}else {
+			FixedSizeList<T> back = chunks.getBack();	
+			if (back.size()==chunkSize) {
+				back = makeChunk();
+				//back.addBack(item);
+				chunks.addBack(back);
+				//back.addBack(item);
+				//back.getBack();
+			}
 			back.addBack(item);	
-		}
 		}
 	}
 	
@@ -124,10 +124,10 @@ public class ChunkyLinkedList<T> implements P6List<T> {
 			throw new BadIndexError();
 		}
 		//modify
-		FixedSizeList<T> front = chunks.getFront();
-		if (front.isFull()) {
-		front = makeChunk();
-		chunks.addFront(front);
+		FixedSizeList<T> place = chunks.getFront();
+		if (place.size()==chunkSize) {
+		place = makeChunk();
+		chunks.addFront(place);
 		}
 		else {
 			
@@ -213,9 +213,7 @@ public class ChunkyLinkedList<T> implements P6List<T> {
 	public boolean isEmpty() {
 		return this.chunks.isEmpty();
 	}
-	public boolean isFull() {
-		return this.chunks.isFull();
-	}
+	
 	private void checkNotEmpty() {
 		if (this.isEmpty()) {
 			throw new EmptyListError();
