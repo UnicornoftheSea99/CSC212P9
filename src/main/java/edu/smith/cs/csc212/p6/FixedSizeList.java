@@ -146,4 +146,10 @@ public class FixedSizeList<T> implements P6List<T> {
 		setIndex(i, getIndex(j));
 		setIndex(j, tmp);
 	}
+
+	@Override
+	public boolean isFull() {
+		// TODO Auto-generated method stub
+		return false;
+	}
 }

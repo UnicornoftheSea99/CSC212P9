@@ -61,7 +61,7 @@ public class ChunkyLinkedList<T> implements P6List<T> {
 	}
 
 	public FixedSizeList<T> makeChunk(){
-		return new FixedSizeList<>(this.chunkSize);
+		return new FixedSizeList<T>(this.chunkSize);
 	}
 	
 	/**
@@ -72,12 +72,18 @@ public class ChunkyLinkedList<T> implements P6List<T> {
 	 */
 	@Override
 	public void addFront(T item) {
+		if (size()==0) {
+			FixedSizeList<T> first = makeChunk();
+			first.addFront(item);
+			chunks.addFront(first);
+		}else {
 		FixedSizeList<T> front = chunks.getFront();
 		if (front.isFull()) {
 		front = makeChunk();
 		chunks.addFront(front);
 		}
 			front.addFront(item);
+		}
 	}
 
 	/**
@@ -88,19 +94,23 @@ public class ChunkyLinkedList<T> implements P6List<T> {
 	 */
 	@Override
 	public void addBack(T item) {
-		FixedSizeList<T> back = chunks.getBack();
 		if (size()==0){
-			addFront(item);
-		}		
+			FixedSizeList<T> last= makeChunk();
+			last.addBack(item);
+			chunks.addBack(last);		
+		}else {
+		FixedSizeList<T> back = chunks.getBack();	
+		System.out.println(back);
 		if (back.isFull()) {
 		back = makeChunk();
 		chunks.addBack(back);
+		//back.addBack(item);
+		}else {
+			back.addBack(item);	
 		}
-			back.addBack(item);
+		}
 	}
 	
-	
-	hello
 	/**
 	 * Add an item before ``index`` in this list. Therefore,
 	 * {@code addIndex(item, 0)} is the same as {@code addFront(item)}.

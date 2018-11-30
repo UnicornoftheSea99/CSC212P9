@@ -336,4 +336,10 @@ public class DoublyLinkedList<T> implements P6List<T> {
 			this.after = null;
 		}
 	}
+
+	@Override
+	public boolean isFull() {
+		// TODO Auto-generated method stub
+		return false;
+	}
 }

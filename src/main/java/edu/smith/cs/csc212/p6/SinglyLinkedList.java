@@ -188,7 +188,7 @@ public class SinglyLinkedList<T> implements P6List<T>, Iterable<T> {
 	 */
 	@Override
 	public T getFront() {
-		if (size()==0) {
+		if (this.isEmpty()) {
 			throw new EmptyListError();
 		}
 		return start.value;
@@ -279,9 +279,9 @@ public class SinglyLinkedList<T> implements P6List<T>, Iterable<T> {
 	
 	@Override
 	public boolean isFull() {
-		if (this.size()==size()) 
+		if (this.size()==size()) {
 			return true;
-		else {
+		}else {
 			return false;
 		}
 	}
