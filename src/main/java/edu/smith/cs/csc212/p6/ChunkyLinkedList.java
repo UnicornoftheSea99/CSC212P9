@@ -19,7 +19,6 @@ public class ChunkyLinkedList<T> implements P6List<T> {
 	public ChunkyLinkedList(int chunkSize) {
 		this.chunkSize = chunkSize;
 		chunks = new SinglyLinkedList<>();
-		//chunks.addBack(new FixedSizeList<>(chunkSize));
 	}
 
 	/**
@@ -29,9 +28,15 @@ public class ChunkyLinkedList<T> implements P6List<T> {
 	 * @throws EmptyListError if the list is empty.
 	 */
 	@Override
+
 	public T removeFront() {
 		checkNotEmpty();
-		return getIndex(0);
+		FixedSizeList<T> chunk = chunks.getFront();
+		T ret = chunk.removeFront();
+		if (chunk.isEmpty()) {
+			chunks.removeFront();
+		}
+		return ret;
 	}
 
 	/**
@@ -43,7 +48,12 @@ public class ChunkyLinkedList<T> implements P6List<T> {
 	@Override
 	public T removeBack() {
 		checkNotEmpty();
-		return getIndex(size()-1);
+		FixedSizeList<T> chunk =chunks.getBack();
+		T get =chunk.removeBack();
+		if (chunk.isEmpty()) {
+			chunks.removeBack();
+		}
+		return get;
 	}
 
 	/**
@@ -57,9 +67,27 @@ public class ChunkyLinkedList<T> implements P6List<T> {
 	@Override
 	public T removeIndex(int index) {
 		checkNotEmpty();
-		return getIndex(index);
+		if (index<0 || index>size()) {
+			throw new BadIndexError();
+		}
+		if (index==0) {
+			removeFront();
+		}
+		if (index==size()) {
+			removeBack();
+		}
+		FixedSizeList<T> chunk = chunks.getIndex(index);
+		T bow = chunk.removeIndex(index);
+		if (chunk.isEmpty()) {
+			chunks.removeIndex(index);
+		}
+		return bow;
 	}
 
+	/**
+	 * Creates New Chunks
+	 * @return new chunk/fixed size list
+	 */
 	public FixedSizeList<T> makeChunk(){
 		return new FixedSizeList<T>(this.chunkSize);
 	}
@@ -72,18 +100,17 @@ public class ChunkyLinkedList<T> implements P6List<T> {
 	 */
 	@Override
 	public void addFront(T item) {
-		if (size()==0) {
-			FixedSizeList<T> first = makeChunk();
-			first.addFront(item);
-			chunks.addFront(first);
-		}else {
-		FixedSizeList<T> front = chunks.getFront();
-		if (front.size()==chunkSize) {
-		front = makeChunk();
-		chunks.addFront(front);
+		if (size()==0){
+			FixedSizeList<T> first= makeChunk();
+			chunks.addFront(first);		
 		}
+		
+			FixedSizeList<T> front = chunks.getFront();
+			if (front.size()==chunkSize) {
+				front = makeChunk();
+				chunks.addFront(front);
+			}
 			front.addFront(item);
-		}
 	}
 
 	/**
@@ -96,19 +123,16 @@ public class ChunkyLinkedList<T> implements P6List<T> {
 	public void addBack(T item) {
 		if (size()==0){
 			FixedSizeList<T> last= makeChunk();
-			last.addBack(item);
 			chunks.addBack(last);		
-		}else {
-			FixedSizeList<T> back = chunks.getBack();	
-			if (back.size()==chunkSize) {
-				back = makeChunk();
-				//back.addBack(item);
-				chunks.addBack(back);
-				//back.addBack(item);
-				//back.getBack();
-			}
-			back.addBack(item);	
 		}
+		
+		FixedSizeList<T> back = chunks.getBack();	
+		if (back.size()==chunkSize) {
+			back = makeChunk();
+			chunks.addBack(back);
+			
+		}
+		back.addBack(item);	
 	}
 	
 	/**
@@ -123,22 +147,23 @@ public class ChunkyLinkedList<T> implements P6List<T> {
 		if (index<0 || index>size()) {
 			throw new BadIndexError();
 		}
-		//modify
-		FixedSizeList<T> place = chunks.getFront();
-		if (place.size()==chunkSize) {
-		place = makeChunk();
-		chunks.addFront(place);
+		if (index == 0) {
+			addFront(item);
+			return;
 		}
-		else {
-			
+		if (index==size()) {
+			addBack(item);
+			return;
 		}
+		FixedSizeList<T> ply = chunks.getIndex(index);
+		if (ply.size()==chunkSize) {
+		ply = makeChunk();
+		chunks.addFront(ply);
+		}else {
+			ply.addIndex(item,index);
+		}
+		
 	}
-//if (size()==0) {
-//	addFront(item);
-//}else if(index==size()) {
-//	addBack(item);
-//}
-
 
 	/**
 	 * Get the first item in the list.
@@ -147,6 +172,9 @@ public class ChunkyLinkedList<T> implements P6List<T> {
 	 */
 	@Override
 	public T getFront() {
+		if (isEmpty()) {
+			throw new EmptyListError();
+		}
 		return this.chunks.getFront().getFront();
 	}
 
@@ -157,9 +185,11 @@ public class ChunkyLinkedList<T> implements P6List<T> {
 	 */
 	@Override
 	public T getBack() {
+		if (isEmpty()) {
+			throw new EmptyListError();
+		}
 		return this.chunks.getBack().getBack();
 	}
-
 
 	/**
 	 * Find the index-th element of this list.
